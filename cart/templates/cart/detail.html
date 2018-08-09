@@ -1,0 +1,104 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- Cart -->
+    <section class="section-wrap shopping-cart pt-0">
+        <div class="container relative">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="table-wrap mb-30">
+                        <table class="shop_table cart table">
+                            <thead>
+                            <tr>
+                                <th class="product-name" colspan="2">Sản phẩm</th>
+                                <th class="product-price">Giá</th>
+                                <th class="product-quantity">Số lượng</th>
+                                <th class="product-subtotal">Thành tiền</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in cart %}
+                                {% with product=item.product %}
+                                    <tr class="cart_item">
+                                        <td class="product-thumbnail">
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <img src="
+                                                        {% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}"
+                                                     alt="">
+                                            </a>
+                                        </td>
+                                        <td class="product-name">
+                                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                        </td>
+                                        <td class="product-price">
+                                            <span class="amount">{{ item.price }} VND</span>
+                                        </td>
+                                        <td class="product-quantity">
+                                            <div class="quantity buttons_added">
+                                                <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                                    <div class="col-sm-8">{{ item.update_quantity_form.quantity }}</div>
+                                                    {{ item.update_quantity_form.update }}
+                                                    <input type="submit" name="apply_coupon" class="btn btn-md btn-dark" value="Cập nhật">
+
+                                                    {% csrf_token %}
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td class="product-subtotal">
+                                            <span class="amount">{{ item.total_price }} VND</span>
+                                        </td>
+                                        <td class="product-remove">
+                                            <a href="{% url "cart:cart_remove" product.id %}" class="remove"
+                                               title="Remove this item">
+                                                <i class="icon icon_close"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endwith %}
+                            {% endfor %}
+                                <tr>
+                                    <td class="product-subtotal" colspan="2">
+                                         <span class="amount">TỔNG TIỀN:</span>
+                                    </td>
+                                    <td colspan="2"></td>
+                                    <td class="product-subtotal">
+                                        <span class="amount">{{ cart.get_total_price }} VND</span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row mb-50">
+                        <div class="col-md-5 col-sm-12">
+                            <div class="coupon">
+                                <input type="text" name="coupon_code" id="coupon_code" class="input-text form-control"
+                                       value placeholder="Coupon code">
+                                <input type="submit" name="apply_coupon" class="btn btn-md btn-dark" value="Apply">
+                            </div>
+                        </div>
+
+                        <div class="col-md-7">
+                            <div class="actions right">
+                                <a href="{% url "shop:product_list_all" %}"><input type="submit" name="update_cart"
+                                                                                   value="Tiếp tục mua sắm"
+                                                                                   class="btn btn-md btn-dark"></a>
+                                <div class="wc-proceed-to-checkout">
+                                    <a href="{% url "orders:order_create" %}"
+                                       class="btn btn-md btn-color"><span>Thanh toán</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+
+
+        </div> <!-- end container -->
+    </section> <!-- end cart -->
+
+{% endblock %}

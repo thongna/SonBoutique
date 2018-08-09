@@ -1,0 +1,12 @@
+{% extends "shop/base.html" %}
+
+{% block title %}
+    Thank You
+{% endblock %}
+
+{% block content %}
+    <h1>Thank you</h1>
+    <p>Đơn hàng của bạn đã được đặt thành công, chúng tôi sẽ gửi hàng cho bạn trong thòi gian sớm nhât.
+        Mã đơn hàng của bạn là
+        <strong>{{ order.id }}</strong>.</p>
+{% endblock %}

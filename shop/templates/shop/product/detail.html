@@ -1,0 +1,248 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <!-- Single Product -->
+    <section class="section-wrap single-product">
+        <div class="container relative">
+            <div class="row">
+
+                <div class="col-sm-6 col-xs-12 mb-60">
+                    {% with product_images as images %}
+                        <div class="flickity flickity-slider-wrap mfp-hover" id="gallery-main">
+                            {% if product.image %}
+                                <div class="gallery-cell">
+                                    <a href="{{ product.image.url }}" class="lightbox-img">
+                                        <img src="{{ product.image.url }}" alt=""/>
+                                        <i class="icon arrow_expand"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if product_images %}
+                                {% for product_image in images %}
+                                    <div class="gallery-cell">
+                                        <a href="{{ product_image.image.url }}" class="lightbox-img">
+                                            <img src="{{ product_image.image.url }}" alt=""/>
+                                            <i class="icon arrow_expand"></i>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div> <!-- end gallery main -->
+
+                        <div class="gallery-thumbs">
+                            {% if product.image %}
+                                <div class="gallery-cell">
+                                    <img src="{{ product.image.url }}" alt=""/>
+                                </div>
+                            {% endif %}
+                            {% for product_image in images %}
+                                <div class="gallery-cell">
+                                    <img src="{{ product_image.image.url }}" alt=""/>
+                                </div>
+                            {% endfor %}
+                        </div> <!-- end gallery thumbs -->
+
+                        </div> <!-- end col img slider -->
+                    {% endwith %}
+                <div class="col-sm-6 col-xs-12 product-description-wrap">
+                    <h1 class="product-title">{{ product.name }}</h1>
+                    <span class="rating">
+              <a href="#">3 Bình luận</a>
+            </span>
+                    <span class="price">
+              <del>
+                <span>{{ product.price }} VND</span>
+              </del>
+              <ins>
+                <span class="ammount">{{ product.price }} VND</span>
+              </ins>
+            </span>
+                    <p class="product-description">{{ product.description }}</p>
+                    <form action="{% url "cart:cart_add" product.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="select-options">
+                            <div class="row row-20">
+                                <div class="col-sm-4">
+                                    Số lượng
+                                </div>
+
+                                <div class="col-sm-3">
+                                    {{ cart_product_form.quantity }}
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="product-actions clearfix">
+                            <li>
+                                <input type="submit" class="btn btn-color btn-lg add-to-cart left"
+                                       value="Thêm vào giỏ hàng">
+                            </li>
+                            <li>
+                                <div class="quantity buttons_added">
+
+                                </div>
+                            </li>
+                        </ul>
+                    </form>
+
+
+                    <div class="product_meta">
+                        <span class="sku">SKU: <a href="#">{{ product.product_code }}</a></span>
+                        <span class="posted_in">Category: <a
+                                href="{% url "shop:product_list_by_category" product.category.slug %}">{{ product.category.name }}</a></span>
+                        <span class="tagged_as">Tags:
+                            {% for tag in product.tags.all %}
+                                <a href="{% url "shop:post_list_by_tag" tag.slug %}">
+                                {{ tag.name }}
+                                </a>
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+
+                    <div class="socials-share clearfix">
+                        <div class="social-icons rounded">
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-google-plus"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-vimeo"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- end col product description -->
+            </div> <!-- end row -->
+
+            <!-- tabs -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tabs tabs-bb">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab-description" data-toggle="tab">Mô tả</a>
+                            </li>
+                            <li>
+                                <a href="#tab-reviews" data-toggle="tab">Bình Luận</a>
+                            </li>
+                        </ul> <!-- end tabs -->
+
+                        <!-- tab content -->
+                        <div class="tab-content">
+
+                            <div class="tab-pane fade in active" id="tab-description">
+                                <p>{{ product.description }}</p>
+                            </div>
+                            <div class="tab-pane fade" id="tab-reviews">
+
+                                <div class="reviews">
+                                    <ul class="reviews-list">
+                                        {% for comment in comments %}
+                                            <li>
+                                            <div class="review-body">
+                                                <div class="review-content">
+                                                    <p class="review-author">
+                                                        <strong>{{ comment.name }}</strong> {{ comment.created }}</p>
+                                                    <div class="rating">
+                                                        <a href="#"></a>
+                                                    </div>
+                                                    <p>{{ comment.body|linebreaks }}</p>
+                                                </div>
+                                            </div>
+                                        {% empty %}
+                                            <p>Chưa có bình luận nào.</p>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% if new_comment %}
+                                    <h2> Bình luận của bạn đã được thêm.</h2>
+                                {% else %}
+                                    <div class="comment-form mt-60">
+                                        <h3 class="heading uppercase mb-40">Bình luận</h3>
+                                        <form method="post" action=".">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div name="name" id="name" type="text">{{ comment_form.name }}</div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div name="comment" id="comment"
+                                                         rows="8">{{ comment_form.body }}</div>
+                                                </div>
+                                            </div>
+                                            {% csrf_token %}
+                                            <p><input type="submit" class="btn btn-lg btn-color" value="Gửi đánh giá">
+                                            </p>
+                                        </form>
+                                    </div><!--  end reviews -->
+                                {% endif %}
+
+                            </div>
+
+                        </div> <!-- end tab content -->
+
+                    </div>
+                </div> <!-- end tabs -->
+            </div> <!-- end row -->
+
+
+        </div> <!-- end container -->
+    </section> <!-- end single product -->
+
+    <!-- Related Items -->
+    <section class="section-wrap related-products pt-0">
+        <div class="container">
+            <div class="row heading-row">
+                <div class="col-md-12 text-center">
+                    <h2 class="heading uppercase">
+                        <small>Sản Phẩm Liên Quan</small>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row row-10">
+                <div id="owl-related-products" class="owl-carousel owl-theme nopadding">
+                    {% for related_product in related_products %}
+                        <div class="product-item">
+                            <div class="product-img">
+                                <a href="{{ related_product.get_absolute_url }}">
+                                    <img src="{{ related_product.image.url }}" alt="">
+                                </a>
+                                <div class="product-label">
+                                    <span class="sale">sale</span>
+                                </div>
+                                <div class="product-actions">
+                                    <a href="#" class="product-add-to-compare" data-toggle="tooltip"
+                                       data-placement="bottom" title="Add to compare">
+                                        <i class="fa fa-exchange"></i>
+                                    </a>
+                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
+                                       data-placement="bottom" title="Add to wishlist">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                </div>
+                                <a href="#" class="product-quickview">Quick View</a>
+                            </div>
+                            <div class="product-details">
+                                <h3>
+                                    <a class="product-title"
+                                       href="{{ related_product.get_absolute_url }}">{{ related_product.name }}</a>
+                                </h3>
+                                <span class="price">
+                                  <ins>
+                                    <span class="ammount">{{ related_product.price }} VND</span>
+                                  </ins>
+                                </span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="row heading-row">
+                            <div class="col-md-12 text-center">
+                                <h2 class="heading uppercase">
+                                    <small>Không có sản phẩm liên quan</small>
+                                </h2>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div> <!-- end owl -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </section> <!-- end related products -->
+{% endblock %}
