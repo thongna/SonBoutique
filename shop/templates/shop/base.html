@@ -182,7 +182,7 @@
 
                                                     <div class="nav-cart-summary">
                                                         <span>Tổng tiền:</span>
-                                                        <span class="total-price">{{ cart.get_total_price }}</span>
+                                                        <span class="total-price">{{ cart.get_total_price_after_discount|floatformat:"0" }}</span>
                                                     </div>
 
                                                     <div class="nav-cart-actions mt-20">
@@ -196,7 +196,7 @@
                                             <div class="menu-cart-amount right">
                                               <span>
                                                 Giỏ hàng /
-                                                <a href="#">{{ cart.get_total_price }} VND</a>
+                                                <a href="#">{{ cart.get_total_price_after_discount|floatformat:"0" }} VND</a>
                                               </span>
                                             </div>
                                         </div> <!-- end cart -->

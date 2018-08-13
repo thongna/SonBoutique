@@ -119,10 +119,18 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
+                                    {% if cart.coupon %}
+                                        <tr>
+                                            <th>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)</th>
+                                        <td>
+                                            <span class="amount">- {{ cart.get_discount }} VND</span>
+                                        </td>
+                                        </tr>
+                                    {% endif %}
                                     <tr class="order-total">
                                         <th><strong>Tổng tiền</strong></th>
                                         <td>
-                                            <strong><span class="amount">{{ cart.get_total_price }} VND</span></strong>
+                                            <strong><span class="amount">{{ cart.get_total_price_after_discount }} VND</span></strong>
                                         </td>
                                     </tr>
                                     </tbody>
