@@ -22,6 +22,7 @@ class Order(models.Model):
                                on_delete=models.SET_NULL)
     discount = models.IntegerField(default=0,
                                    validators=[MinValueValidator(0), MaxValueValidator(100)])
+    total_price = models.DecimalField(max_digits=12, decimal_places=0)
     class Meta:
         ordering = ('-created',)
 

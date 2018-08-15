@@ -2,6 +2,32 @@
 {% load static %}
 
 {% block content %}
+    <!-- Hero Slider -->
+    <section class="section-wrap nopadding">
+        <div class="container">
+            <div class="entry-slider">
+                <div class="flexslider" id="flexslider-hero">
+                    <ul class="slides clearfix">
+                        {% for banner in banners %}
+                            <li>
+                                <a href="{{ banner.url }}"><img src="{{ banner.img.url }}" alt=""></a>
+
+                                <div class="hero-holder text-center right-align">
+                                    <div class="hero-lines">
+                                        <h1 class="hero-heading white">{{ banner.name }}</h1>
+                                        <h4 class="hero-subheading white uppercase">{{ banner.content }}</h4>
+                                    </div>
+                                    <a href="{{ banner.url }}" class="btn btn-lg btn-white"><span>Shop Now</span></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div> <!-- end slider -->
+        </div>
+    </section> <!-- end hero slider -->
+
     <section class="section-wrap new-arrivals pb-40">
         <div class="container">
             <div class="row heading-row">
@@ -17,7 +43,7 @@
                         <div class="product-item">
                             <div class="product-img">
                                 <a href="{{ product.get_absolute_url }}">
-                                    <img src="{% if product.image %}{{ product.image.url }}
+                                    <img width="100%" height="300px" src="{% if product.image %}{{ product.image.url }}
                                     {% else %}{% static "img/no_image.png" %}{% endif %}" alt="">
                                 </a>
                                 <div class="product-label">
@@ -41,9 +67,6 @@
                                        href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                                 </h3>
                                 <span class="price">
-                                  <del>
-                                    <span>{{ product.price }} VND</span>
-                                  </del>
                                   <ins>
                                     <span class="ammount">{{ product.price }} VND</span>
                                   </ins>
@@ -54,5 +77,76 @@
                 {% endfor %}
             </div> <!-- end row -->
         </div>
-    </section>
+    </section><!-- end new arrivals -->
+
+    <!-- Newsletter -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="newsletter-box">
+                    <h5 class="uppercase">Đăng ký nhận cập nhật thông tin khuyến mãi</h5>
+                    <form>
+                        <input type="email" class="newsletter-input" placeholder="Email của bạn">
+                        <input type="submit" class="newsletter-submit btn btn-md btn-dark" value="Đăng ký">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Sellers -->
+    <section class="section-wrap pb-0">
+        <div class="container">
+
+            <div class="row heading-row">
+                <div class="col-md-12 text-center">
+                    <h2 class="heading uppercase">
+                        <small>BÁN CHẠY NHẤT</small>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row row-10">
+
+                {% for product in products %}
+                    <div class="col-md-3 col-xs-6">
+                        <div class="product-item">
+                            <div class="product-img">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img width="100%" height="300px" src="{% if product.image %}{{ product.image.url }}
+                                    {% else %}{% static "img/no_image.png" %}{% endif %}" alt="">
+                                </a>
+                                <div class="product-label">
+                                    <span class="sale">sale</span>
+                                </div>
+                                <div class="product-actions">
+                                    <a href="#" class="product-add-to-compare" data-toggle="tooltip"
+                                       data-placement="bottom" title="Add to compare">
+                                        <i class="fa fa-exchange"></i>
+                                    </a>
+                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
+                                       data-placement="bottom" title="Add to wishlist">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                </div>
+                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Quick View</a>
+                            </div>
+                            <div class="product-details">
+                                <h3>
+                                    <a class="product-title"
+                                       href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                </h3>
+                                <span class="price">
+                                  <ins>
+                                    <span class="ammount">{{ product.price }} VND</span>
+                                  </ins>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div> <!-- end row -->
+        </div>
+    </section> <!-- end best sellers -->
 {% endblock %}

@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def root(folder):
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), '..',folder)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -31,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'statisticadmin.apps.StatisticadminConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +45,8 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'coupons.apps.CouponsConfig',
+    'others.apps.OthersConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -69,7 +74,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'shop.pages_context.show_category_menu',
-                'cart.context_processors.cart'
+                'shop.pages_context.get_url',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -124,11 +130,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+STATIC_ROOT = root('staticstorage')
 STATIC_URL = '/static/'
+# Additional locations of static files
+STATICFILES_DIRS = (
+    root('static'),
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # the key use to store the cart in the user session
 CART_SESSION_ID = 'cart'
+
+from django.urls import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('statisticadmin:home')
+LOGIN_URL = reverse_lazy('statisticadmin:login')
+LOGOUT_URL = reverse_lazy('statisticadmin:logout')

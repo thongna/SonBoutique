@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Category, Product, ProductImage, Comment
+from .models import Category, Product, ProductImage, Comment, Banner
 from .forms import CommentForm
 from taggit.models import Tag
 from django.db.models import Count
@@ -34,10 +34,11 @@ def  product_list(request, category_slug=None, tag_slug=None):
 
 
 def home(request):
-    categories = Category.objects.all()
+    banners = Banner.objects.filter(active=True)
     products = Product.objects.filter(available=True)[:4]
     return render(request, 'shop/index.html',
-                  {'products': products})
+                  {'products': products,
+                   'banners': banners})
 
 # Show product detail
 def product_detail(request, id, slug):

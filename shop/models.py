@@ -83,3 +83,29 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment by {} on {}'.format(self.name, self.product)
+
+class Link(models.Model):
+    name = models.CharField(max_length=50)
+    url = models.CharField(max_length=500)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('name', )
+
+    def __str__(self):
+        return self.name
+
+class Banner(models.Model):
+    name = models.CharField(max_length=100)
+    content = models.TextField()
+    img = models.ImageField(upload_to='banners/%Y/%m/%d', blank=True)
+    url = models.CharField(max_length=300, blank=True)
+    order = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('order',)
+
+    def __str__(self):
+        return self.name

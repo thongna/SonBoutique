@@ -1,0 +1,62 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Liên hệ{% endblock %}
+
+{% block content %}
+    <!-- Google Map -->
+    <div class="container mt-60">
+        <div id="google-map" class="gmap" data-address="{{ son_boutique_contact.address }}"></div>
+    </div>
+
+    <!-- Contact -->
+    <section class="section-wrap contact">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-8">
+                    <h5 class="uppercase mb-30">Send Us Message</h5>
+                    <form id="contact-form" action="#">
+
+                        <div class="contact-name">
+                            <input name="name" id="name" type="text" placeholder="Name*">
+                        </div>
+                        <div class="contact-email">
+                            <input name="mail" id="mail" type="email" placeholder="E-mail*">
+                        </div>
+                        <div class="contact-subject">
+                            <input name="subject" id="subject" type="text" placeholder="Subject">
+                        </div>
+
+                        <textarea name="comment" id="comment" placeholder="Message" rows="9"></textarea>
+                        <input type="submit" class="btn btn-lg btn-color btn-submit" value="Submit" id="submit-message">
+                        <div id="msg" class="message"></div>
+                    </form>
+                </div> <!-- end col -->
+
+                <div class="col-md-4 mb-40 mt-mdm-40 contact-info">
+
+                    <div class="address-wrap">
+                        <h4 class="uppercase">Địa chỉ</h4>
+                        <h6>{{ son_boutique_contact.name }}</h6>
+                        <address class="address">{{ son_boutique_contact.address }}</address>
+                    </div>
+
+                    <h4 class="uppercase">Thông tin liên hệ</h4>
+                    <ul class="contact-info-list">
+                        <li><span>Điện thoại: </span><a href="tel:+1-888-1554-456-123">{{ son_boutique_contact.phone_number }}</a></li>
+                        <li><span>Email: </span><a href="mailto:{{ son_boutique_contact.email }}" class="sliding-link">{{ son_boutique_contact.email }}</a>
+                        </li>
+                        <li><span>Skype: </span><a href="#">{{ son_boutique_contact.skype }}</a></li>
+                    </ul>
+
+                    <h4 class="uppercase">Giờ mở cửa</h4>
+                    <p>Monday – Sunday: {{ son_boutique_contact.businesshour }}</p>
+
+                </div>
+
+            </div>
+        </div>
+    </section> <!-- end contact -->
+
+
+{% endblock %}

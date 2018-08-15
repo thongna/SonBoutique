@@ -13,6 +13,7 @@ def order_create(request):
             if cart.coupon:
                 order.coupon = cart.coupon
                 order.discount = cart.coupon.discount
+                order.total_price = cart.get_total_price_after_discount()
             order.save()
             for item in cart:
                 OrderItem.objects.create(order=order,

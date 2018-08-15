@@ -23,8 +23,11 @@ urlpatterns = [
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('coupons/', include('coupons.urls', namespace='coupons')),
+    path('others/', include('others.urls', namespace='others')),
     path('', include('shop.urls', namespace='shop')),
+    path('statisticadmin/', include('statisticadmin.urls', namespace='statisticadmin')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

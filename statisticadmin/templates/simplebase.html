@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="shortcut icon" href="{% static "statisticadmin/images/favicon.ico" %}">
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static "statisticadmin/css/bootstrap.min.css" %}" rel="stylesheet">
+        <!-- MetisMenu CSS -->
+        <link href="{% static "statisticadmin/css/metisMenu.min.css" %}" rel="stylesheet">
+        <!-- Icons CSS -->
+        <link href="{% static "statisticadmin/css/icons.css" %}" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="{% static "statisticadmin/css/style.css" %}" rel="stylesheet">
+
+    </head>
+
+
+    <body>
+
+        <!-- HOME -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <div class="wrapper-page">
+
+                            {% block content %}
+
+                            {% endblock %}
+
+                        </div>
+                        <!-- end wrapper -->
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END HOME -->
+
+
+
+        <!-- js placed at the end of the document so the pages load faster -->
+        <script src="{% static "statisticadmin/js/jquery-2.1.4.min.js" %}"></script>
+        <script src="{% static "statisticadmin/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "statisticadmin/js/metisMenu.min.js" %}"></script>
+        <script src="{% static "statisticadmin/js/jquery.slimscroll.min.js" %}"></script>
+
+        <!-- App Js -->
+        <script src="{% static "statisticadmin/js/jquery.app.js" %}"></script>
+
+    </body>
+</html>
