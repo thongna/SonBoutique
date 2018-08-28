@@ -137,11 +137,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_ROOT = root('staticstorage')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+
 # Additional locations of static files
 STATICFILES_DIRS = (
-    root('static'),
+    os.path.join(PROJECT_ROOT, 'static'),
 )
 
 MEDIA_URL = '/media/'
@@ -156,3 +157,7 @@ LOGIN_URL = reverse_lazy('account:login')
 LOGOUT_URL = reverse_lazy('account:logout')
 
 from SonBoutique.aws.conf import *
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
