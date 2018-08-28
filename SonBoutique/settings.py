@@ -23,10 +23,10 @@ def root(folder):
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '0u%0%2nro-_i)yeq7=kg2c8f#1^zi8kwx7-m0e8zr9#qosw*9h'
+ SECRET_KEY = '0u%0%2nro-_i)yeq7=kg2c8f#1^zi8kwx7-m0e8zr9#qosw*9h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+ DEBUG = FALSE
 
 ALLOWED_HOSTS = ['*']
 
@@ -95,15 +95,24 @@ WSGI_APPLICATION = 'SonBoutique.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-"""
 
+
+# add this
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+DATABASES['default']['CONN_MAX_AGE'] = 500
+
+
+SECRET_KEY = os.environ.get('SECRET_KEY', 'SOME+RANDOM+KEY(z9+3vnm(jb0u@&w68t#5_e8s9-lbfhv-')  
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWOR')
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -164,11 +173,3 @@ from SonBoutique.aws.conf import *
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
-}
