@@ -1,9 +1,309 @@
 {% extends 'statisticadmin/adminbase.html' %}
 
-{% block title%}
+{% block title %}
     DASHBOARD
 {% endblock %}
 
 {% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box widget-inline">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget-inline-box text-center">
+                                <h3 class="m-t-10"><i class="text-primary mdi mdi-access-point-network"></i> <b
+                                        data-plugin="counterup"><a
+                                        href="{% url "statisticadmin:order" %}">{{ total_order_items }}</a></b></h3>
+                                <p class="text-muted">ĐÃ ĐẶT HÀNG</p>
+                            </div>
+                        </div>
 
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget-inline-box text-center">
+                                <h3 class="m-t-10"><i class="text-custom mdi mdi-airplay"></i> <b
+                                        data-plugin="counterup">
+                                    <a href="{% url "statisticadmin:paid" 1 %}">{{ total_saled_items }}</a></b></h3>
+                                <p class="text-muted">ĐÃ BÁN</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget-inline-box text-center">
+                                <h3 class="m-t-10"><i class="text-info mdi mdi-black-mesa"></i> <b
+                                        data-plugin="counterup">
+                                    <a href="{% url "statisticadmin:revenue" %}">{{ income_amounts }} VND</a></b></h3>
+                                <p class="text-muted">DOANH THU</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="widget-inline-box text-center b-0">
+                                <h3 class="m-t-10"><i class="text-danger mdi mdi-cellphone-link"></i> <b
+                                        data-plugin="counterup"><a
+                                        href="{% url "statisticadmin:stock_list" %}">{{ total_stock }}</a></b></h3>
+                                <p class="text-muted">TỒN KHO</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end row -->
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <h4 class="m-t-0">Doanh thu theo ngày</h4>
+                    <div class="text-center">
+                        <ul class="list-inline chart-detail-list">
+                            <li>
+                                <h5 class="font-normal"></h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="revenue" style="height: 400px;"></div>
+                </div>
+            </div> <!-- end col -->
+
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <h4 class="m-t-0">Số lượng đơn hàng & sản phẩm theo ngày</h4>
+                    <div class="text-center">
+                        <ul class="list-inline chart-detail-list">
+                            <li>
+                                <h5 class="font-normal"></h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <h4 class="m-t-0">Sản phẩm bán chạy nhất</h4>
+                    <div class="text-center">
+                        <ul class="list-inline chart-detail-list">
+                            <li>
+                                <h5 class="font-normal"></h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="saled-items-by-type" style="height: 400px;"></div>
+                </div>
+            </div> <!-- end col -->
+
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <h4 class="m-t-0">Sản phẩm tồn kho nhiều nhất</h4>
+                    <div class="text-center">
+                        <ul class="list-inline chart-detail-list">
+                            <li>
+                                <h5 class="font-normal"></h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="items-in-stock-by-type" style="height: 400px;"></div>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h4 class="m-t-0">Đơn hàng gần đây</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover mails m-0 table table-actions-bar">
+                            <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="10%">Tên</th>
+                                <th width="20%">Địa chỉ</th>
+                                <th>Số điện thoại</th>
+                                <th>Tổng tiền</th>
+                                <th width="25%">Thời gian đặt hàng</th>
+                                <th>Thanh toán</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.first_name }}</td>
+                                    <td>{{ order.address }}</td>
+                                    <td>{{ order.phone_number }}</td>
+                                    <td>{{ order.total_price }} VND</td>
+                                    <td>{{ order.created }}</td>
+                                    {% if order.paid %}
+                                        <td class="paid">
+                                            <span class="label label-success">PAID</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="order-id-{{ order.id }}">
+                                            <span class="label label-danger">UNPAID</span>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <ul class="pager">
+                            <li class="next">
+                                <a href="{% url "statisticadmin:order" %}">Xem thêm →</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block domready %}
+    <!-- Highchart init -->
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
+
+    <script>
+        Highcharts.chart('revenue', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                    {% for entry in dataset %}'{{ entry.create }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'VND'
+                },
+            },
+            series: [{
+                name: 'Doanh thu (VND)',
+                data: [
+                    {% for entry in dataset %}{{ entry.income }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+                color: '#458bc4'
+            }]
+        });
+
+        Highcharts.chart('container', {
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                    {% for entry in total_order_by_day %}'{{ entry.create }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'Số lượng'
+                },
+            },
+            tooltip: {
+                crosshairs: true,
+                shared: true
+            },
+            plotOptions: {
+                spline: {
+                    marker: {
+                        radius: 4,
+                        lineColor: '#666666',
+                        lineWidth: 1
+                    }
+                }
+            },
+            series: [{
+                name: 'Số đơn hàng',
+                marker: {
+                    symbol: 'square'
+                },
+                data: [
+                    {% for entry in total_order_by_day %}{{ entry.total_order }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+
+            },
+                {
+                name: 'Số sản phẩm',
+                marker: {
+                    symbol: 'square'
+                },
+                data: [
+                    {% for entry in total_items_by_day %}{{ entry.total_items }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+                    color: '#4bd396'
+            }
+
+            ]
+        });
+
+        Highcharts.chart('saled-items-by-type', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                    {% for entry in total_saled_items_by_type %}'{{ entry.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+            },
+            series: [{
+                name: 'Số lượng (sản phẩm)',
+                data: [
+                    {% for entry in total_saled_items_by_type %}{{ entry.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+                color: '#31B404'
+            }]
+        });
+
+        Highcharts.chart('items-in-stock-by-type', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                    {% for entry in items_in_stock_by_type %}'{{ entry.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+            },
+            series: [{
+                name: 'Số lượng (sản phẩm)',
+                data: [
+                    {% for entry in items_in_stock_by_type %}{{ entry.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+                color: '#DF7401'
+            }]
+        });
+    </script>
 {% endblock %}

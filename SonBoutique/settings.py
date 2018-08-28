@@ -33,19 +33,23 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'statisticadmin.apps.StatisticadminConfig',
+    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'shop.apps.ShopConfig',
     'taggit',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'coupons.apps.CouponsConfig',
     'others.apps.OthersConfig',
+    'statisticadmin.apps.StatisticadminConfig',
+    'warehouse.apps.WarehouseConfig',
+    'finance.apps.FinanceConfig',
 
 ]
 
@@ -75,7 +79,10 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'shop.pages_context.show_category_menu',
                 'shop.pages_context.get_url',
+                'shop.pages_context.get_contact',
                 'cart.context_processors.cart',
+                'statisticadmin.admin_context.get_unreaded_messages',
+                'statisticadmin.admin_context.get_unpaid_orders',
             ],
         },
     },
@@ -119,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
@@ -144,6 +151,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 CART_SESSION_ID = 'cart'
 
 from django.urls import reverse_lazy
-LOGIN_REDIRECT_URL = reverse_lazy('statisticadmin:home')
-LOGIN_URL = reverse_lazy('statisticadmin:login')
-LOGOUT_URL = reverse_lazy('statisticadmin:logout')
+LOGIN_REDIRECT_URL = reverse_lazy('account:login-redirect')
+LOGIN_URL = reverse_lazy('account:login')
+LOGOUT_URL = reverse_lazy('account:logout')
+
+from SonBoutique.aws.conf import *

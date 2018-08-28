@@ -1,5 +1,6 @@
 {% extends "shop/base.html" %}
 {% load static %}
+{% block title %}SON BOUTIQUE{% endblock %}
 
 {% block content %}
     <!-- Hero Slider -->
@@ -37,9 +38,15 @@
                     </h2>
                 </div>
             </div>
+            <div class="right">
+                <a href="{% url "shop:product_list_all" %}"
+                   class="btn btn-sm btn-light text-center"><span>Xem thêm >>></span></a>
+            </div>
+            <br>
+            <br>
             <div class="row row-10">
                 {% for product in products %}
-                    <div class="col-md-3 col-xs-6">
+                    <div class="col-md-3 col-xs-6 animated-from-left">
                         <div class="product-item">
                             <div class="product-img">
                                 <a href="{{ product.get_absolute_url }}">
@@ -50,16 +57,12 @@
                                     <span class="sale">sale</span>
                                 </div>
                                 <div class="product-actions">
-                                    <a href="#" class="product-add-to-compare" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to compare">
-                                        <i class="fa fa-exchange"></i>
-                                    </a>
-                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to wishlist">
+                                    <a class="product-add-to-compare" data-toggle="tooltip"
+                                       data-placement="bottom" title="Yêu thích">
                                         <i class="fa fa-heart"></i>
                                     </a>
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Quick View</a>
+                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Chi tiết</a>
                             </div>
                             <div class="product-details">
                                 <h3>
@@ -76,6 +79,8 @@
                     </div>
                 {% endfor %}
             </div> <!-- end row -->
+
+
         </div>
     </section><!-- end new arrivals -->
 
@@ -106,10 +111,15 @@
                 </div>
             </div>
 
+            <div class="right">
+                <a href="{% url "shop:best_saled_product" 1 %}"
+                   class="btn btn-sm btn-light text-center"><span>Xem thêm >>></span></a>
+            </div>
+            <br>
+            <br>
             <div class="row row-10">
-
-                {% for product in products %}
-                    <div class="col-md-3 col-xs-6">
+                {% for product in best_saled_products %}
+                    <div class="col-md-3 col-xs-6 animated-from-left">
                         <div class="product-item">
                             <div class="product-img">
                                 <a href="{{ product.get_absolute_url }}">
@@ -120,16 +130,12 @@
                                     <span class="sale">sale</span>
                                 </div>
                                 <div class="product-actions">
-                                    <a href="#" class="product-add-to-compare" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to compare">
-                                        <i class="fa fa-exchange"></i>
-                                    </a>
-                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to wishlist">
+                                    <a class="product-add-to-compare" data-toggle="tooltip"
+                                       data-placement="bottom" title="Yêu thích">
                                         <i class="fa fa-heart"></i>
                                     </a>
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Quick View</a>
+                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Chi tiết</a>
                             </div>
                             <div class="product-details">
                                 <h3>

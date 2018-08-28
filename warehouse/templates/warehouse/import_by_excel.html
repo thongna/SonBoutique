@@ -1,0 +1,100 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% load static %}
+{% block title %}NHẬP HÀNG NHANH{% endblock %}
+
+{% block content %}
+    <h3 class="m-b-20 header-title">NHẬP KHO HÀNG NHANH</h3>
+
+    <h5>Nhập file excel (*.xlsx, *.xls). Bạn có thể tải form mẫu excel ở <a target="_blank" href="https://s3-ap-southeast-1.amazonaws.com/sonboutique/static/statisticadmin/files/nhap+kho+hang.xlsx">đây</a>.</h5>
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file"
+               title="Upload excel file"
+               name="excel_file"
+               style="border: 1px solid black; padding: 5px;"
+               required="required">
+        <p></p>
+        <input value="Tải file" class="btn btn-primary waves-effect waves-light load-excel" type="submit">
+    </form>
+    <hr>
+    <div class="row p-t-50">
+        <div class="col-lg-12">
+            <div class="m-b-20">
+                <h4>Sản Phẩm Nhập Kho</h4>
+                <p class="text-muted font-13 m-b-20">
+                    Hãy kiểm tra kỹ các thông tin nhập kho trước khi nhập kho. Xem mẫu dưới:
+                    <br>
+                    <code>Mã sản phẩm: </code>SRM0001 <code>Giá Nhập: </code> 330000 <code>Giá Bán: </code> 550000
+                    <code>Số Lượng: </code> 100
+                </p>
+
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mã Sản Phẩm</th>
+                            <th>Giá Nhập (VND)</th>
+                            <th>Giá Bán (VND)</th>
+                            <th>Số Lượng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in excel_data %}
+                            <tr>
+                                <th scope="row"><p class="number"
+                                                   data-id="{{ row|first }}">{{ forloop.counter }}</p></th>
+                                {% for cell in row %}
+
+                                    <td><p class="data-{{ forloop.counter }}" data-id="{{ cell }}">{{ cell }}</p></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <p></p>
+                <input value="Nhập kho" class="btn btn-primary waves-effect waves-light import" type="submit">
+            </div>
+
+        </div>
+
+    </div>
+    <!-- end row -->
+
+{% endblock %}
+
+{% block domready %}
+    <!-- post data to views -->
+    $('input.import').click(function(e){
+    e.preventDefault();
+    var p_code_array=[];
+    var o_price_array=[];
+    var s_price_array=[];
+    var quantity_array=[];
+    $( ".data-1" ).each(function( index ) {p_code_array.push($(this).attr('data-id'));});
+    $( ".data-2" ).each(function( index ) {o_price_array.push($(this).attr('data-id'));});
+    $( ".data-3" ).each(function( index ) {s_price_array.push($(this).attr('data-id'));});
+    $( ".data-4" ).each(function( index ) {quantity_array.push($(this).attr('data-id'));});
+    if (!(p_code_array == ''))
+    {
+    alert(p_code_array);
+    $.post('{% url "warehouse:import_by_excel" %}',
+    {
+    "p_code_array": p_code_array,
+    "o_price_array": o_price_array,
+    "s_price_array": s_price_array,
+    "quantity_array": quantity_array,
+    "action": "import"
+    },
+    function(data){
+    if (data['status'] == 'ok')
+    {
+    $('tbody').empty();
+    }
+    }
+    );
+    }
+    });
+{% endblock %}

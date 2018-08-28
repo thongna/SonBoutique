@@ -1,0 +1,52 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% block title %}DANH SÁCH CHI PHÍ CHI TIẾT{% endblock %}
+
+{% block content %}
+    <div class="table-responsive m-b-20">
+        <h3 class="m-b-20 header-title">DANH SÁCH CHI PHÍ CHI TIẾT {{ title }}</h3>
+
+        <form action=".">
+            <div class="input-group col-md-6">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+                <input width="50%" type="text" id="example-input1-group2" name="q" class="form-control"
+                       placeholder="Tìm kiếm theo loại chi phí hoặc người nhập">
+            </div>
+        </form>
+        <br>
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="5%">ID</th>
+                <th width="30%">Loại chi phí</th>
+                <th width="10%">Tháng</th>
+                <th width="15%">Tổng tiền (VND)</th>
+                <th width="20%">Ghi chú</th>
+                <th width="10%">Được tạo bởi</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            <form action="." method="post">
+                {% csrf_token %}
+                {% for expense in expenses %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ expense.name }}</td>
+                        <td>{{ expense.month }}</td>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.note }}</td>
+                        <td>{{ expense.create_by }}</td>
+                    </tr>
+                {% endfor %}
+            </form>
+            </tbody>
+
+        </table>
+        {% include "pagination.html" with page=expenses %}
+
+    </div>
+
+{% endblock %}

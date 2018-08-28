@@ -1,0 +1,101 @@
+{% extends "statisticadmin/simplebase.html" %}
+{% load static %}
+{% load my_form_tag %}
+{% block title %}TẠO TÀI KHOẢN | SonBoutique{% endblock %}
+
+{% block content %}
+    <div class="m-t-40 card-box">
+        <div class="text-center">
+            <h2 class="text-uppercase m-t-0 m-b-30">
+                <a href="#" class="text-success">
+                    <span><img src="{% static "statisticadmin/images/logo.png" %}" alt="" height="30"></span>
+                </a>
+            </h2>
+            <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
+        </div>
+        <div class="account-content">
+            <form class="form-horizontal" action="." method="post">
+                {% csrf_token %}
+                {% if user_form.errors %}
+                    <p class="text-danger">
+                        Tài khoản đăng ký đã tồn tại hoặc mật khẩu không khớp. Vui lòng kiểm tra lại các thông tin đăng ký.
+                    </p>
+                {% endif %}
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="username">Tài khoản</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.username|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="username">Tên</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.first_name|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="username">Họ</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.last_name|addclass:"form-control" }}
+                    </div>
+                </div>
+
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="emailaddress">Email</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.email|addclass:"form-control" }}
+                    </div>
+                </div>
+
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="password">Mật khẩu</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.password|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group m-b-20">
+                    <div class="col-xs-12">
+                        <label for="password">Nhập lại mật khẩu</label>
+                        <span class="text-danger">*</span>
+                        {{ user_form.password2|addclass:"form-control" }}
+                    </div>
+                </div>
+
+                <div class="form-group m-b-30">
+                    <div class="col-xs-12">
+                        <div class="checkbox checkbox-primary">
+                            <input id="checkbox5" type="checkbox">
+                            <label for="checkbox5">
+                                Tôi đồng ý với các <a href="#">Điều khoản và Chính sách</a>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group account-btn text-center m-t-10">
+                    <div class="col-xs-12">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng Ký</button>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    <!-- end card-box-->
+
+
+    <div class="row m-t-50">
+        <div class="col-sm-12 text-center">
+            <p class="text-muted">Bạn đã có tài khoản? <a href="{% url "account:login" %}"
+                                                              class="text-dark m-l-5">Đăng nhập</a></p>
+        </div>
+    </div>
+{% endblock %}

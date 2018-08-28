@@ -1,0 +1,15 @@
+<ul class="pager">
+    {% if page.has_previous %}
+        <li>
+            <a href="?page={{ page.previous_page_number }}"><i class="fa fa-angle-left"></i> Quay lại</a>
+        </li>
+    {% endif %}
+    <span class="current">
+        Trang <strong>{{ page.number }}</strong> của <strong>{{ page.paginator.num_pages }}</strong>
+    </span>
+    {% if page.has_next %}
+        <li>
+            <a href="?page={{ page.next_page_number }}">Tiếp theo <i class="fa fa-angle-right"></i></a>
+        </li>
+    {% endif %}
+</ul>

@@ -12,9 +12,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['product_code', 'name', 'slug', 'price', 'stock', 'available', 'created', 'updated']
+    list_display = ['product_code', 'name', 'slug', 'price', 'stock', 'saled', 'available', 'created', 'updated']
     list_filter = ['available', 'created', 'updated']
-    list_editable = ['price', 'stock', 'available']
+    list_editable = ['price', 'stock', 'available', 'saled']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
 
@@ -37,3 +37,4 @@ class BannerAdmin(admin.ModelAdmin):
     list_filter = ['-created']
     list_filter = ['name']
     list_editable = ['active']
+

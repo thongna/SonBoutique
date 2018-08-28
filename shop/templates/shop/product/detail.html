@@ -1,4 +1,5 @@
 {% extends "shop/base.html" %}
+{% load my_form_tag %}
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
@@ -48,17 +49,14 @@
                 <div class="col-sm-6 col-xs-12 product-description-wrap">
                     <h1 class="product-title">{{ product.name }}</h1>
                     <span class="rating">
-              <a href="#">3 Bình luận</a>
+              <a href="#tab-reviews" data-toggle="tab">{{ comments.count }} Bình luận</a>
             </span>
                     <span class="price">
-              <del>
-                <span>{{ product.price }} VND</span>
-              </del>
               <ins>
                 <span class="ammount">{{ product.price }} VND</span>
               </ins>
             </span>
-                    <p class="product-description">{{ product.description }}</p>
+                    <p class="product-description">{{ product.description|markdown|truncatewords:50 }}</p>
                     <form action="{% url "cart:cart_add" product.id %}" method="post">
                         {% csrf_token %}
                         <div class="select-options">
@@ -87,7 +85,7 @@
 
 
                     <div class="product_meta">
-                        <span class="sku">SKU: <a href="#">{{ product.product_code }}</a></span>
+                        <span class="sku">Code: <a href="#">{{ product.product_code }}</a></span>
                         <span class="posted_in">Category: <a
                                 href="{% url "shop:product_list_by_category" product.category.slug %}">{{ product.category.name }}</a></span>
                         <span class="tagged_as">Tags:
@@ -102,11 +100,20 @@
 
                     <div class="socials-share clearfix">
                         <div class="social-icons rounded">
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-google-plus"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-vimeo"></i></a>
+                            {% for url in urls %}
+                                <a target="_blank" rel="noopener noreferrer"
+                                   href="
+                                           {% if url.name ==  "Son Boutique's Facebook" %}{{ url.url }}{% else %}#{% endif %}">
+                                    <i class="fa fa-facebook"></i></a>
+                                <a target="_blank" rel="noopener noreferrer"
+                                   href="
+                                           {% if url.name ==  "Son Boutique's Twitter" %}{{ url.url }}{% else %}#{% endif %}">
+                                    <i class="fa fa-twitter"></i></a>
+                                <a target="_blank" rel="noopener noreferrer"
+                                   href="
+                                           {% if url.name ==  "Son Boutique's Instagram" %}{{ url.url }}{% else %}#{% endif %}">
+                                    <i class="fa fa-instagram"></i></a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div> <!-- end col product description -->
@@ -129,7 +136,7 @@
                         <div class="tab-content">
 
                             <div class="tab-pane fade in active" id="tab-description">
-                                <p>{{ product.description }}</p>
+                                <p>{{ product.description|markdown|linebreaks }}</p>
                             </div>
                             <div class="tab-pane fade" id="tab-reviews">
 
@@ -210,15 +217,11 @@
                                 </div>
                                 <div class="product-actions">
                                     <a href="#" class="product-add-to-compare" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to compare">
-                                        <i class="fa fa-exchange"></i>
-                                    </a>
-                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to wishlist">
+                                       data-placement="bottom" title="Yêu thích">
                                         <i class="fa fa-heart"></i>
                                     </a>
                                 </div>
-                                <a href="#" class="product-quickview">Quick View</a>
+                                <a href="{{ related_product.get_absolute_url }}" class="product-quickview">Chi tiết</a>
                             </div>
                             <div class="product-details">
                                 <h3>

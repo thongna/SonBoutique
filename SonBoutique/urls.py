@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler404, handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,8 +27,15 @@ urlpatterns = [
     path('others/', include('others.urls', namespace='others')),
     path('', include('shop.urls', namespace='shop')),
     path('statisticadmin/', include('statisticadmin.urls', namespace='statisticadmin')),
+    path('account/', include('account.urls', namespace='account')),
+    path('warehouse/', include('warehouse.urls', namespace='warehouse')),
+    path('finance/', include('finance.urls', namespace='finance')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+handler404 = 'others.views.error_404_view'
+handler500 = 'others.views.error_404_view'

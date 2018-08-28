@@ -1,0 +1,73 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% load static %}
+{% load my_form_tag %}
+{% block title %}CẬP NHẬT HỒ SƠ{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="p-0 text-center">
+                    <div class="member-card">
+                        <div class="thumb-xl member-thumb m-b-10 center-block">
+                            <img src="{% if request.user.profile.photo %}{{ request.user.profile.photo.url }}{% else %}{% static 'shop/img/user_no_image.png' %}{% endif %}" class="img-circle img-thumbnail"
+                                 alt="profile-image">
+                            <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
+                        </div>
+
+                        <div class="">
+                            <h4 class="m-b-5">{{ request.user.username }}</h4>
+                            <p class="text-muted">{{ request.user.email }}</p>
+                        </div>
+                    </div>
+
+                </div> <!-- end card-box -->
+
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+        <div class="tab-pane" id="profile-b1">
+            <!-- Personal-Information -->
+            <div class="panel panel-default panel-fill">
+                <div class="panel-heading">
+                    <h3 class="panel-title">CẬP NHẬT HỒ SƠ</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" action="." method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="FullName">Tên</label>
+                            {{ user_form.first_name|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName">Họ</label>
+                            {{ user_form.last_name|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="Email">Email</label>
+                            {{ user_form.email|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName">Ngày sinh</label>
+                            {{ profile_form.date_of_birth|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName">Số điện thoại</label>
+                            {{ profile_form.phone_number|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName">Địa chỉ</label>
+                            {{ profile_form.address|addclass:"form-control" }}
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName">Ảnh đại diện</label>
+                            {{ profile_form.photo|addclass:"form-control" }}
+                        </div>
+                        <button class="btn btn-primary waves-effect waves-light w-md" type="submit">Cập nhật</button>
+                    </form>
+
+                </div>
+            </div>
+            <!-- Personal-Information -->
+        </div>
+    </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 {% extends "shop/base.html" %}
 {% load static %}
+{% load my_form_tag %}
 {% block title %}Liên hệ{% endblock %}
 
 {% block content %}
@@ -14,21 +15,26 @@
             <div class="row">
 
                 <div class="col-md-8">
-                    <h5 class="uppercase mb-30">Send Us Message</h5>
-                    <form id="contact-form" action="#">
-
+                    <h5 class="uppercase mb-30">GỬI TIN NHẮN CHO CHÚNG TÔI</h5>
+                    <form id="contact-form" action="." method="post">
+                        {% csrf_token %}
                         <div class="contact-name">
-                            <input name="name" id="name" type="text" placeholder="Name*">
+                            {{ message_form.name }}
                         </div>
                         <div class="contact-email">
-                            <input name="mail" id="mail" type="email" placeholder="E-mail*">
+                            {{ message_form.email|addplaceholder:"Email*" }}
+                        </div>
+                        <div class="contact-phone">
+                            {{ message_form.phone_number }}
                         </div>
                         <div class="contact-subject">
-                            <input name="subject" id="subject" type="text" placeholder="Subject">
+                            {{ message_form.title }}
                         </div>
 
-                        <textarea name="comment" id="comment" placeholder="Message" rows="9"></textarea>
-                        <input type="submit" class="btn btn-lg btn-color btn-submit" value="Submit" id="submit-message">
+                        {{ message_form.body }}
+
+                        <p><input type="submit" class="btn btn-lg btn-color btn-submit" value="Gửi">
+                                            </p>
                         <div id="msg" class="message"></div>
                     </form>
                 </div> <!-- end col -->
@@ -59,4 +65,47 @@
     </section> <!-- end contact -->
 
 
+{% endblock %}
+
+{% block domready %}
+<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
+<script type="text/javascript" src="{% static 'shop/js/gmap3.js' %}"></script>
+<!-- Google Map -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var gmapDiv = $("#google-map");
+        var gmapMarker = gmapDiv.attr("data-address");
+
+        gmapDiv.gmap3({
+            zoom: 16,
+            address: gmapMarker,
+            oomControl: true,
+            navigationControl: true,
+            scrollwheel: false,
+            styles: [
+                {
+                    "featureType": "all",
+                    "elementType": "all",
+                    "stylers": [
+                        {"saturation": "0"}
+                    ]
+                }]
+        })
+            .marker({
+                address: gmapMarker,
+                icon: "{% static "shop/img/map_pin.png" %}"
+            })
+            .infowindow({
+                content: "{{ son_boutique_contact.address }}"
+            })
+            .then(function (infowindow) {
+                var map = this.get(0);
+                var marker = this.get(1);
+                marker.addListener('click', function () {
+                    infowindow.open(map, marker);
+                });
+            });
+    });
+</script>
 {% endblock %}

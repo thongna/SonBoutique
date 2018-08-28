@@ -75,6 +75,11 @@ class Cart(object):
     def clear(self):
         # remove cart from session
         del self.session[settings.CART_SESSION_ID]
+        try:
+            if (self.session['coupon_id']):
+                del self.session['coupon_id']
+        except:
+            pass
         self.save()
 
     @property

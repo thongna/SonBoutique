@@ -1,0 +1,77 @@
+{% extends "shop/base.html" %}
+{% block title %}CÂU HỎI THƯỜNG GẶP{% endblock %}
+
+{% block content %}
+    <!-- FAQ -->
+    <section class="section-wrap faq">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-8">
+                    {% for question_type in question_types %}
+                        {% if question_type.question_set.all %}
+                        <h2 class="uppercase mb-20">{{ question_type.name }}</h2>
+                        <div class="toggle">
+                            {% for question in faq_list %}
+                                {% if question.name.name == question_type.name %}
+                                    <div class="acc-panel">
+                                        <a href="#">{{ question.title }}</a>
+                                    </div>
+                                    <div class="panel-content">
+                                        <p>{{ question.answer }}</p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div> <!-- end toggle -->
+                        <br>
+                        <br>
+                        {% endif %}
+
+                    {% endfor %}
+                </div> <!-- end col -->
+
+                <div class="col-sm-3 col-sm-offset-1">
+                    <h2 class="uppercase mb-30">HỖ TRỢ</h2>
+                    <div class="service-item-box mb-30">
+                        <div class="icon-holder">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="service-text">
+                            <h3>Điện thoại</h3>
+                            <p>{{ son_boutique_contact.phone_number }}</p>
+                        </div>
+                    </div>
+                    <div class="service-item-box mb-30">
+                        <div class="icon-holder">
+                            <i class="fa fa-envelope-o"></i>
+                        </div>
+                        <div class="service-text">
+                            <h3>email</h3>
+                            <p>{{ son_boutique_contact.email }}</p>
+                        </div>
+                    </div>
+                    <div class="service-item-box mb-40">
+                        <div class="icon-holder">
+                            <i class="fa fa-skype"></i>
+                        </div>
+                        <div class="service-text">
+                            <h3>skype</h3>
+                            <p>{{ son_boutique_contact.skype }}</p>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="call-to-action">
+                        <h5 class="uppercase">BẠN MUỐN QUAY LẠI MUA HÀNG</h5>
+                        <a href="{% url "shop:product_list_all" %}" class="btn btn-lg btn-color"><span>SHOP NOW</span></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section> <!-- end faq -->
+{% endblock %}

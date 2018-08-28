@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load my_form_tag %}
+{% block title %}CẬP NHẬT HỒ SƠ{% endblock %}
+
+{% block content %}
+    <section class="section-wrap login-register pt-0 pb-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-4 mb-40">
+                    <div class="login">
+                        <br>
+                        <h4 class="uppercase center-block">Cập nhật thông tin hồ sơ</h4>
+                        <p class="form-row form-row-wide">
+                            <img width="100px" height="100px" src="
+                                    {% if request.user.profile.photo %}{{ request.user.profile.photo.url }}{% else %}{% static 'shop/img/user_no_image.png' %}{% endif %}"
+                                 class=" center-block img-thumbnail"
+                                 alt="profile-image">
+                        </p>
+                        <form role="form" action="." method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <p class="form-row form-row-wide">
+                                <label>Tên</label>
+                                {{ user_form.first_name|addclass:"form-control" }}
+                            </p>
+                            <p class="form-row form-row-wide">
+                                <label>Họ</label>
+                                {{ user_form.last_name|addclass:"form-control" }}
+                            </p>
+                            <p class="form-row form-row-wide">
+                                <label>Email</label>
+                                {{ user_form.email|addclass:"form-control" }}
+                            </p>
+                             <p class="form-row form-row-wide">
+                                <label>Ngày sinh</label>
+                                {{ profile_form.date_of_birth|addclass:"form-control" }}
+                            </p>
+                             <p class="form-row form-row-wide">
+                                <label>Số điện thoại</label>
+                                {{ profile_form.phone_number|addclass:"form-control" }}
+                            </p>
+                             <p class="form-row form-row-wide">
+                                <label>Địa chỉ</label>
+                                {{ profile_form.address|addclass:"form-control" }}
+                            </p>
+                             <p class="form-row form-row-wide">
+                                <label>Ảnh đại diện</label>
+                                {{ profile_form.photo|addclass:"form-control" }}
+                            </p>
+                            <button type="submit" class="btn">Cập nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

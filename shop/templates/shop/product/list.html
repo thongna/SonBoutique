@@ -1,5 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     <section class="section-wrap new-arrivals pb-40">
@@ -8,20 +9,14 @@
                 <div class="col-md-12 text-center">
                     <h2 class="heading uppercase">
                     <small>
-                        {% if title_id == 0 %}
-                            Tất cả sản phẩm
-                        {% elif title_id == 1 %}
-                            {{ category.name }}
-                        {% elif title_id == 2 %}
-                            Danh sách sản phẩm với {{ tag.name }}
-                        {% endif %}
+                        {{ title }}
                     </small>
                     </h2>
                 </div>
             </div>
             <div class="row row-10">
                 {% for product in products %}
-                    <div class="col-md-3 col-xs-6">
+                    <div class="col-md-3 col-xs-6 animated-from-left">
                         <div class="product-item">
                             <div class="product-img">
                                 <a href="{{ product.get_absolute_url }}">
@@ -32,16 +27,12 @@
                                     <span class="sale">sale</span>
                                 </div>
                                 <div class="product-actions">
-                                    <a href="#" class="product-add-to-compare" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to compare">
-                                        <i class="fa fa-exchange"></i>
-                                    </a>
-                                    <a href="#" class="product-add-to-wishlist" data-toggle="tooltip"
-                                       data-placement="bottom" title="Add to wishlist">
+                                    <a href="" class="product-add-to-compare" data-toggle="tooltip"
+                                       data-placement="bottom" title="Yêu thích">
                                         <i class="fa fa-heart"></i>
                                     </a>
                                 </div>
-                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Quick View</a>
+                                <a href="{{ product.get_absolute_url }}" class="product-quickview">Chi tiết</a>
                             </div>
                             <div class="product-details">
                                 <h3>
@@ -56,7 +47,10 @@
                         </div>
                     </div>
                 {% endfor %}
+
+
             </div> <!-- end row -->
+        {% include "pagination.html" with page=products %}
         </div>
     </section>
 {% endblock %}

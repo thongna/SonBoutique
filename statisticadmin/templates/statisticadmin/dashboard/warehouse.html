@@ -1,0 +1,65 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% load static %}
+{% block title %}KHO HÀNG{% endblock %}
+
+{% block content %}
+    <div class="table-responsive m-b-20">
+        <h3><b>DANH SÁCH HÀNG HÓA TỒN KHO</b></h3>
+        <br>
+        <form action=".">
+             <div class="input-group col-md-6">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+            <input width="50%" type="text" id="example-input1-group2" name="q" class="form-control"
+                   placeholder="Tìm kiếm theo mã SP hoặc tên SP">
+        </div>
+        </form>
+
+        <br>
+
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="5%">ID</th>
+                <th width="12%">Mã sản phẩm</th>
+                <th width="20%">Tên sản phẩm</th>
+                <th width="10%">Hình ảnh</th>
+                <th width="10%">Giá bán</th>
+                <th width="10%">Số lượng tồn</th>
+                <th width="18%">Ngày cập nhật</th>
+                <th width="10%">Đường dẫn</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            <form action="." method="post">
+                {% csrf_token %}
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.product_code }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>
+                            <img width="60px" height="70px" src="{% if product.image %}{{ product.image.url }}
+                                    {% else %}{% static "shop/img/no_image.png" %}{% endif %}" alt="">
+                        </td>
+                        <td>{{ product.price }} VND</td>
+                        <td>{{ product.stock }}</td>
+                        <td>{{ product.updated }}</td>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-info btn-xs" target="_blank"
+                               rel="noopener noreferrer">Chi tiết ></a>
+                            <p></p>
+                            <a href="{% url "admin:index" %}shop/product/{{ product.id }}/change/"
+                               class="btn btn-warning btn-xs" target="_blank" rel="noopener noreferrer">Chỉnh sửa ></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </form>
+            </tbody>
+        </table>
+        {% include "pagination.html" with page=products %}
+    </div>
+{% endblock %}

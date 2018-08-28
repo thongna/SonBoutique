@@ -1,0 +1,80 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% load static %}
+{% block title %}DANH SÁCH TIN NHẮN CỦA KHÁCH HÀNG{% endblock %}
+
+{% block content %}
+    <div class="table-responsive m-b-20">
+        <h3><b>DANH SÁCH TIN NHẮN CỦA KHÁCH HÀNG {{ title }}</b></h3>
+        <br>
+        <form action=".">
+            <div class="input-group col-md-6">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+                <input width="50%" type="text" id="example-input1-group2" name="q" class="form-control"
+                       placeholder="Tìm kiếm theo tiêu đề, nội dung tin nhắn, hoặc người gửi">
+            </div>
+        </form>
+        <br>
+
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="5%">ID</th>
+                <th width="20%">Tiêu đề</th>
+                <th width="25%">Nội dung</th>
+                <th width="10%">Người gửi</th>
+                <th width="10%">Số điện thoại</th>
+                <th width="10%">Thời gian</th>
+                <th width="10%">Trạng thái</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            <form action="{% url "others:readed" %}" method="post">
+                {% csrf_token %}
+                {% for message in messages %}
+                    <tr data-id="{{ message.id }}" {% if message.readed %} {% else %}class="danger"{% endif %}>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ message.title }}</td>
+                        <td>{{ message.body }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.phone_number }}</td>
+                        <td>{{ message.created }}</td>
+                        <td class="readed-{{ message.id }}">
+                            {% if message.readed %}
+                                <span class="label label-success">Đã đọc</span>
+                            {% else %}
+                                <span class="label label-danger">Chưa đọc</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </form>
+            </tbody>
+        </table>
+        {% include "pagination.html" with page=messages %}
+
+    </div>
+
+{% endblock %}
+
+{% block domready %}
+    $('tr.danger').click(function(e){
+    e.preventDefault();
+    $(this).removeClass('danger');
+    $.post('{% url "others:readed" %}',
+    {
+    id: $(this).data('id')
+    },
+    function(data){
+    if (data['status'] == 'ok')
+    {
+    var $td = '.readed-' + (data['message_id']);
+    $($td).replaceWith("<td><span class='label label-success'>Đã đọc</span></td>");
+    }
+    }
+    );
+    });
+{% endblock %}

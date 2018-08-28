@@ -48,9 +48,22 @@
                     <div class="row">
                         <div class="top-bar-links">
                             <ul class="col-sm-6 top-bar-acc">
-                                <li class="top-bar-link"><a href="#">My Account</a></li>
-                                <li class="top-bar-link"><a href="#">ĐĂNG NHẬP</a></li>
-                                <li class="top-bar-link"><a href="contact.html">LIÊN HỆ</a></li>
+                                {% if request.user.is_authenticated %}
+
+                                    <li class="dropdown top-bar-link">
+                                        <a href="#">TÀI KHOẢN</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a><strong>Xin Chào {{ request.user.username }}</strong></a></li>
+                                            <li><a href="{% url "account:edit" %}">HỒ SƠ</a></li>
+                                            <li><a href="{% url "account:logout" %}">ĐĂNG XUẤT</a></li>
+                                        </ul>
+                                    </li>
+                                {% else %}
+                                    <li class="top-bar-link"><a href="{% url "account:login" %}">ĐĂNG NHẬP</a></li>
+                                {% endif %}
+
+
+                                <li class="top-bar-link"><a href="{% url "others:contact" %}">LIÊN HỆ</a></li>
                             </ul>
 
                             <ul class="col-sm-6 text-right top-bar-currency-language">
@@ -74,13 +87,43 @@
                                 <li>
                                     <div class="social-icons">
                                         {% for url in urls %}
-                                            {% if url.name ==  "Son Boutique's Facebook" %}
-                                                <a target="_blank" rel="noopener noreferrer" href="{{ url.url }}"><i
-                                                        class="fa fa-facebook"></i></a>
-                                            {% endif %}
+                                            <a target="_blank" rel="noopener noreferrer"
+                                               href="
+
+
+
+
+
+                                                       {% if url.name ==  "Son Boutique's Facebook" %}{{ url.url }}{% else %}#{% endif %}">
+                                                <i class="fa fa-facebook"></i></a>
+                                            <a target="_blank" rel="noopener noreferrer"
+                                               href="
+
+
+
+
+
+                                                       {% if url.name ==  "Son Boutique's Youtube" %}{{ url.url }}{% else %}#{% endif %}">
+                                                <i class="fa fa-youtube-play"></i></a>
+                                            <a target="_blank" rel="noopener noreferrer"
+                                               href="
+
+
+
+
+
+                                                       {% if url.name ==  "Son Boutique's Twitter" %}{{ url.url }}{% else %}#{% endif %}">
+                                                <i class="fa fa-twitter"></i></a>
+                                            <a target="_blank" rel="noopener noreferrer"
+                                               href="
+
+
+
+
+
+                                                       {% if url.name ==  "Son Boutique's Instagram" %}{{ url.url }}{% else %}#{% endif %}">
+                                                <i class="fa fa-instagram"></i></a>
                                         {% endfor %}
-                                        <a href=""><i class="fa fa-twitter"></i></a>
-                                        <a href="#"><i class="fa fa-google-plus"></i></a>
                                     </div>
                                 </li>
                             </ul>
@@ -123,8 +166,8 @@
 
                             <!-- Search -->
                             <div class="nav-search hidden-sm hidden-xs">
-                                <form method="get">
-                                    <input type="search" class="form-control" placeholder="Tìm kiếm">
+                                <form method="get" action="{% url "shop:product_list_all" %}">
+                                    <input type="search" name="q" class="form-control" placeholder="Tìm kiếm">
                                     <button type="submit" class="search-button">
                                         <i class="icon icon_search"></i>
                                     </button>
@@ -156,6 +199,13 @@
                                                             <div class="nav-cart-img">
                                                                 <a href="{{ product.get_absolute_url }}">
                                                                     <img height="70" width="60" src="
+
+
+
+
+
+
+
 
 
                                                                             {% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}"
@@ -231,23 +281,32 @@
                                     </li>
 
                                     <li class="dropdown">
-                                        <a href="/">Home</a>
+                                        <a href="/">Trang chủ</a>
                                     </li>
 
-                                    <li class="dropdown">
-                                        <a href="#">Pages</a>
-                                        <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="about-us.html">About Us</a></li>
-                                            <li><a href="{% url "others:contact" %}">Liên Hệ</a></li>
-                                            <li><a href="login.html">Đăng Nhập</a></li>
-                                            <li><a href="faq.html">F.A.Q</a></li>
-                                            <li><a href="404.html">404</a></li>
-                                        </ul>
-                                    </li>
 
+                                    {% for category in categories_menu %}
+                                        {% if category.parent_id == 0 %}
+                                            <li class="dropdown">
+                                                <a href="{% url "shop:product_list_by_collection" category.id %}">{{ category.name }}</a>
+                                                <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
+                                                <ul class="dropdown-menu">
+                                                    {% for cateChild in categories_menu %}
+                                                        {% if cateChild.parent_id == category.id %}
+                                                            <li>
+                                                                <a href="{{ cateChild.get_absolute_url }}">{{ cateChild.name }}</a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <!--
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories</a>
+                                        <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
                                         <ul class="dropdown-menu megamenu">
                                             <li>
                                                 <div class="megamenu-wrap">
@@ -255,13 +314,15 @@
                                                         {% for category in categories_menu %}
                                                             {% if category.parent_id == 0 %}
                                                                 <div class="col-md-3 megamenu-item">
-                                                                    <a href="{% url "shop:product_list_all" %}">
+                                                                    <a href="
+                                        {% url "shop:product_list_by_collection" category.id %}">
                                                                         <h6>{{ category.name }}</h6></a>
                                                                     <ul class="menu-list">
                                                                         {% for cateChild in categories_menu %}
                                                                             {% if cateChild.parent_id == category.id %}
                                                                                 <li>
-                                                                                    <a href="{{ cateChild.get_absolute_url }}">{{ cateChild.name }}</a>
+                                                                                    <a href="
+                                            {{ cateChild.get_absolute_url }}">{{ cateChild.name }}</a>
                                                                                 </li>
                                                                             {% endif %}
                                                                         {% endfor %}
@@ -273,39 +334,57 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    </li> <!-- end categories -->
+                                    </li> end categories -->
 
-                                    <li class="dropdown">
-                                        <a href="#">Blog</a>
-                                        <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="blog-standard.html">Standard</a></li>
-                                            <li><a href="blog-single.html">Single Post</a></li>
-                                        </ul>
-                                    </li>
 
                                     <li class="dropdown">
                                         <a href="#">Shop</a>
                                         <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
                                         <ul class="dropdown-menu">
-                                            <li><a href="shop-catalog.html">Catalog</a></li>
-                                            <li><a href="shop-collections.html">Collections</a></li>
-                                            <li><a href="shop-single-product.html">Single Product</a></li>
-                                            <li><a href="shop-cart.html">Cart</a></li>
-                                            <li><a href="shop-checkout.html">Checkout</a></li>
+                                            <li><a href="{% url "shop:product_list_all" %}">Hàng mới về</a></li>
+                                            <li><a href="{% url "shop:collection_list" %}">Bộ Sưu Tập</a></li>
+                                            <li><a href="{% url "cart:cart_detail" %}">Giỏ Hàng</a></li>
+                                            <li><a href="{% url "orders:order_create" %}">Thanh Toán</a></li>
                                         </ul>
                                     </li>
 
-
+                                    <li class="dropdown">
+                                        <a href="#">Pages</a>
+                                        <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url "others:aboutus" %}">About Us</a></li>
+                                            <li><a href="{% url "others:contact" %}">Liên Hệ</a></li>
+                                            <li><a href="{% url "others:faq" %}">F.A.Q</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="#">Blog</a>
+                                        <i class="fa fa-angle-down dropdown-toggle" data-toggle="dropdown"></i>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Standard</a></li>
+                                            <li><a href="#">Single Post</a></li>
+                                        </ul>
+                                    </li>
 
                                     <li class="mobile-links">
                                         <ul>
-                                            <li>
-                                                <a href="#">Đăng nhập</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Tài khoản của tôi</a>
-                                            </li>
+                                            {% if request.user.is_authenticated %}
+
+                                                <li class="dropdown">
+                                                    <a href="#">TÀI KHOẢN</a>
+                                                    <i class="fa fa-angle-down dropdown-toggle"
+                                                       data-toggle="dropdown"></i>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a><strong>Xin Chào {{ request.user.username }}</strong></a>
+                                                        </li>
+                                                        <li><a href="{% url "account:edit" %}">HỒ SƠ</a></li>
+                                                        <li><a href="{% url "account:logout" %}">ĐĂNG XUẤT</a></li>
+                                                    </ul>
+                                                </li>
+                                            {% else %}
+                                                <li><a href="{% url "account:login" %}">ĐĂNG NHẬP</a>
+                                                </li>
+                                            {% endif %}
                                         </ul>
                                     </li>
 
@@ -333,9 +412,8 @@
                         <div class="widget footer-links">
                             <h5 class="widget-title uppercase">THÔNG TIN</h5>
                             <ul class="list-no-dividers">
-                                <li><a href="#">Cửa hàng</a></li>
-                                <li><a href="#">Về chúng tôi</a></li>
-                                <li><a href="#">Liên hệ bán sỉ</a></li>
+                                <li><a href="{% url "others:aboutus" %}">Về chúng tôi</a></li>
+                                <li><a href="{% url "others:contact" %}">Liên hệ bán sỉ</a></li>
                                 <li><a href="#">Quy định chung</a></li>
                             </ul>
                         </div>
@@ -345,8 +423,8 @@
                         <div class="widget footer-links">
                             <h5 class="widget-title uppercase">Help</h5>
                             <ul class="list-no-dividers">
-                                <li><a href="#">Liên hệ chúng tôi</a></li>
-                                <li><a href="#">Câu hỏi thường gặp</a></li>
+                                <li><a href="{% url "others:contact" %}">Liên hệ chúng tôi</a></li>
+                                <li><a href="{% url "others:faq" %}">Câu hỏi thường gặp</a></li>
                                 <li><a href="#">Bảo hành</a></li>
                             </ul>
                         </div>
@@ -356,7 +434,14 @@
                         <div class="widget footer-links">
                             <h5 class="widget-title uppercase">TÀI KHOẢN</h5>
                             <ul class="list-no-dividers">
-                                <li><a href="#">Tài khoản của tôi</a></li>
+                                <li><a href="
+
+
+
+
+
+                                        {% if request.user.is_authenticated %}{% url "account:edit" %}{% else %}{% url "account:login" %}{% endif %}">Tài
+                                    khoản của tôi</a></li>
                                 <li><a href="#">Lịch sử mua hàng</a></li>
                                 <li><a href="#">Quà tặng</a></li>
                             </ul>
@@ -366,27 +451,58 @@
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="widget">
                             <h5 class="widget-title uppercase">Về chúng tôi</h5>
-                            <p class="mb-0">Son Boutique là nhà phân phối chính thức mỹ phẩm MAXCLINIC - một trong những nhãn hiệu mỹ phẩm nổi tiếng nhất Hàn Quốc - tại Thành phố Vinh.</p>
+                            <p class="mb-0">Son Boutique là nhà phân phối chính thức mỹ phẩm MAXCLINIC - một trong những
+                                nhãn hiệu mỹ phẩm nổi tiếng nhất Hàn Quốc - tại Thành phố Vinh.</p>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="widget footer-get-in-touch">
-                            <h5 class="widget-title uppercase">Liên hệ</h5>
-                            <address class="footer-address"><span>Địa chỉ:</span> 107 Chu Văn An, Thành phố Vinh, Tỉnh
-                                Nghệ An.
+                            <h5 class="widget-title uppercase">Liên hệ </h5>
+                            <address class="footer-address"><span>Địa chỉ:</span> {{ son_boutique_contact.address }}
                             </address>
-                            <p>Điện thoại: <a href="tel:+ 84 98-100-3737">+ 84 98-100-3737</a></p>
-                            <p>Email: <a href="mailto:titamy@gmail.com">sonboutique37@gmail.com</a></p>
+                            <p>Điện thoại: <a href="tel:+ 84 98-100-3737">{{ son_boutique_contact.phone_number }}</a>
+                            </p>
+                            <p>Email: <a href="mailto:titamy@gmail.com">{{ son_boutique_contact.email }}</a></p>
                             <div class="social-icons rounded mt-20">
                                 {% for url in urls %}
-                                    {% if url.name ==  "Son Boutique's Facebook" %}
-                                        <a target="_blank" rel="noopener noreferrer" href="{{ url.url }}"><i
-                                                class="fa fa-facebook"></i></a>
-                                    {% endif %}
+                                    <a target="_blank" rel="noopener noreferrer"
+                                       href="
+
+
+
+
+
+                                               {% if url.name ==  "Son Boutique's Facebook" %}{{ url.url }}{% else %}#{% endif %}">
+                                        <i class="fa fa-facebook"></i></a>
+                                    <a target="_blank" rel="noopener noreferrer"
+                                       href="
+
+
+
+
+
+                                               {% if url.name ==  "Son Boutique's Youtube" %}{{ url.url }}{% else %}#{% endif %}">
+                                        <i class="fa fa-youtube-play"></i></a>
+                                    <a target="_blank" rel="noopener noreferrer"
+                                       href="
+
+
+
+
+
+                                               {% if url.name ==  "Son Boutique's Twitter" %}{{ url.url }}{% else %}#{% endif %}">
+                                        <i class="fa fa-twitter"></i></a>
+                                    <a target="_blank" rel="noopener noreferrer"
+                                       href="
+
+
+
+
+
+                                               {% if url.name ==  "Son Boutique's Instagram" %}{{ url.url }}{% else %}#{% endif %}">
+                                        <i class="fa fa-instagram"></i></a>
                                 {% endfor %}
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
                             </div>
                         </div>
                     </div> <!-- end stay in touch -->
@@ -431,45 +547,32 @@
 <script type="text/javascript" src="{% static 'shop/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'shop/js/plugins.js' %}"></script>
 <script type="text/javascript" src="{% static 'shop/js/scripts.js' %}"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js"></script>
-    <script type="text/javascript" src="{% static 'shop/js/gmap3.js' %}"></script>
-    <!-- Google Map -->
-  <script type="text/javascript">
-    $(document).ready( function(){
 
-      var gmapDiv = $("#google-map");
-      var gmapMarker = gmapDiv.attr("data-address");
 
-      gmapDiv.gmap3({
-        zoom: 16,
-        address: gmapMarker,
-        oomControl: true,
-        navigationControl: true,
-        scrollwheel: false,
-        styles: [
-          {
-          "featureType":"all",
-          "elementType":"all",
-            "stylers":[
-              { "saturation":"0" }
-            ]
-        }]
-      })
-      .marker({
-        address: gmapMarker,
-        icon: "img/map_pin.png"
-      })
-      .infowindow({
-        content: "V Tytana St, Manila, Philippines"
-      })
-      .then(function (infowindow) {
-        var map = this.get(0);
-        var marker = this.get(1);
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
-      });
+<!-- App Js -->
+<script src='{% static "statisticadmin/js/jquery.app.js" %}'></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script>
+    var csrftoken = Cookies.get('csrftoken');
+
+    function csrfSafeMethod(method) {
+// these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
     });
-  </script>
+    $(document).ready(function () {
+        {% block domready %}
+        {% endblock %}
+    });
+</script>
+
+
 </body>
 </html>

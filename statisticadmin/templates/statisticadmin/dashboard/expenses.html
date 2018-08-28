@@ -1,0 +1,124 @@
+{% extends "statisticadmin/adminbase.html" %}
+{% block title %}THỐNG KÊ CHI PHÍ{% endblock %}
+
+{% block content %}
+    <div class="table-responsive m-b-20">
+        <h3 class="m-b-20 header-title">THỐNG KÊ CHI PHÍ {{ title }}</h3>
+
+        {% if expense_month_rate %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-box" style="height: 190px;">
+                        <a href="{% url "statisticadmin:expenses_in_month" month %}"
+                           class="btn btn-sm btn-default pull-right">Chi tiết</a>
+                        <h4 class="m-t-0 text-dark">Tháng {{ month }}</h4>
+                        <h2 class="text-danger text-center m-b-30 m-t-30"><span
+                                data-plugin="counterup">{{ expense_month }}</span> VND</h2>
+                        <span class="pull-right">
+                        <i {% if expense_month_rate >= 0 %}class="fa fa-caret-up text-primary m-r-5"
+                           {% else %}class="fa fa-caret-down text-danger m-r-5"{% endif %}></i>
+                        {{ expense_month_rate|floatformat:'2' }}%
+                        </span>
+                        </p>
+                    </div>
+                    <div class="card-box" style="height: 190px;">
+                        <a href="{% url "statisticadmin:expenses_in_month" last_month %}"
+                           class="btn btn-sm btn-default pull-right">Chi tiết</a>
+                        <h4 class="m-t-0 text-dark">Tháng {{ last_month }}</h4>
+                        <h2 class="text-primary text-center m-b-30 m-t-30"><span
+                                data-plugin="counterup">{{ expense_last_month }}</span> VND</h2>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-box">
+                        <h4 class="m-t-0">Chi phí theo tháng</h4>
+                        <div class="text-center">
+                            <ul class="list-inline chart-detail-list">
+                                <li>
+                                    <h5 class="font-normal"></h5>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="expense-by-month" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <form action=".">
+            <div class="input-group col-md-6">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+                <input width="50%" type="text" id="example-input1-group2" name="m" class="form-control"
+                       placeholder="Tìm kiếm theo tháng mm-YYYY (ví dụ: 10-2018)">
+            </div>
+        </form>
+        <br>
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th width="5%">No.</th>
+                <th width="40%">Thời gian</th>
+                <th width="40%">Chi phí (VND)</th>
+                <th width="15%">Chi tiết</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+                {% for expense in expense_month_dataset %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ expense.create }}</td>
+                        <td>{{ expense.expense }}</td>
+                        <td><a href="{% url "statisticadmin:expenses_in_month" expense.create %}" class="btn-sm btn-info pull-left">Xem chi tiết >>></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+        {% include "pagination.html" with page=expense_month_dataset %}
+    </div>
+{% endblock %}
+
+{% block domready %}
+    <!-- Highchart init -->
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
+
+    <script>
+
+        Highcharts.chart('expense-by-month', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ' '
+            },
+            xAxis: {
+                categories: [
+                    {% for entry in expense_month_dataset %}'{{ entry.create }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: 'VND'
+                },
+            },
+            series: [{
+                name: 'Chi phí (VND)',
+                data: [
+                    {% for entry in expense_month_dataset %}{{ entry.expense }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ],
+                color: '#d57171'
+            }]
+        });
+
+    </script>
+{% endblock %}

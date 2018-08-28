@@ -6,8 +6,15 @@ app_name = 'statisticadmin'
 
 urlpatterns = [
     path('dashboard/', views.home, name='home'),
-    #path('login/', views.user_login, name='login'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('register/', views.register, name='register'),
+    path('order/', views.order, name='order'),
+    path('order/day/<str:day>/', views.order, name='order_on_day'),
+    path('order/month/<str:month>/', views.order, name='order_in_month'),
+    path('order/paid/<int:paid>/', views.order, name='paid'),
+    path('order-paid/', views.order_paid, name='order_paid'),
+    path('stock/', views.stock_list, name='stock_list'),
+    path('revenue/', views.revenue, name='revenue'),
+    path('expenses/', views.expenses, name='expenses'),
+    path('expense-list/', views.expense_list, name='expense-list'),
+    path('expense-list/m=<str:month>/', views.expense_list, name='expenses_in_month'),
+    path('profit/', views.profit, name='profit'),
 ]
