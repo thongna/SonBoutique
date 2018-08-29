@@ -14,7 +14,6 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 def root(folder):
     return os.path.join(os.path.abspath(os.path.dirname(__file__)), '..',folder)
@@ -23,10 +22,11 @@ def root(folder):
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
- SECRET_KEY = '0u%0%2nro-_i)yeq7=kg2c8f#1^zi8kwx7-m0e8zr9#qosw*9h'
+#SECRET_KEY = '0u%0%2nro-_i)yeq7=kg2c8f#1^zi8kwx7-m0e8zr9#qosw*9h'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'SOME+RANDOM+KEY(z9+3vnm(jb0u@&w68t#5_e8s9-lbfhv-')  
 
 # SECURITY WARNING: don't run with debug turned on in production!
- DEBUG = FALSE
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -95,14 +95,12 @@ WSGI_APPLICATION = 'SonBoutique.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # add this
 import dj_database_url
@@ -111,8 +109,6 @@ DATABASES['default'].update(db_from_env)
 DATABASES['default']['CONN_MAX_AGE'] = 500
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'SOME+RANDOM+KEY(z9+3vnm(jb0u@&w68t#5_e8s9-lbfhv-')  
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWOR')
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -148,13 +144,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = root('staticstorage')
 STATIC_URL = '/static/'
-
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
+    root('static'),
 )
 
 MEDIA_URL = '/media/'
@@ -169,7 +163,3 @@ LOGIN_URL = reverse_lazy('account:login')
 LOGOUT_URL = reverse_lazy('account:logout')
 
 from SonBoutique.aws.conf import *
-
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
